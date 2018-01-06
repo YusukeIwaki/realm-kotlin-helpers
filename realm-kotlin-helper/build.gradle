@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.1'
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 27
+    }
+}
+
+dependencies {
+    compileOnly "io.realm:realm-android-library:4.3.1"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.10"
+    compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21"
+    compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.21"
+}
+
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
