@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 27
@@ -27,3 +28,5 @@ kotlin {
         coroutines "enable"
     }
 }
+
+apply from: rootProject.file('bintray_publish.gradle')

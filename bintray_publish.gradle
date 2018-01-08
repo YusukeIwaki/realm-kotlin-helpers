@@ -1,0 +1,12 @@
+tasks.withType(Javadoc).all {
+    enabled = false
+}
+
+publish {
+    userOrg = "yusukeiwaki"
+    groupId = "io.github.yusukeiwaki.realm-kotlin-helpers"
+    artifactId = project.getProjectDir().name
+    publishVersion = "0.0.1"
+    desc = "Utility classes for realm-java with Kotlin."
+    website = "https://github.com/YusukeIwaki/realm-kotlin-helpers"
+}
