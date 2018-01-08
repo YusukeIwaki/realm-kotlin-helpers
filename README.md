@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'io.github.yusukeiwaki.realm-kotlin-helpers:realm-kotlin-helper:0.0.1'
+  implementation 'io.github.yusukeiwaki.realm-kotlin-helpers:realm-kotlin-helper:0.0.2'
 }
 ```
 
@@ -20,13 +20,30 @@ dependencies {
 
 ```
 launch {
-    KtRealmHelper.executeTransaction(Realm.Transaction { realm ->
+    KtRealmHelper.executeTransaction { realm ->
         realm.createObject(User::class.java, 1)
-    }).await()
+    }.await()
 
-    KtRealmHelper.executeTransaction(Realm.Transaction { realm ->
+    KtRealmHelper.executeTransaction { realm ->
         realm.createObject(User::class.java, 2)
-    }).await()
+    }.await()
 }
 ```
 
+## read/readList
+
+```
+// read a specific user
+KtRealmHelper.read { realm ->
+    realm.where(User::class.java).equalTo("id", userId).findFirst()
+}?.let {
+    Log.d("RealmHelperSample", "found: User[id=${it.id}]")
+}
+
+// read all users
+KtRealmHelper.readList { realm ->
+    realm.where(User::class.java).findAll()
+}.forEach {
+    Log.d("RealmHelperSample", "list: User[id=${it.id}]")
+}
+```

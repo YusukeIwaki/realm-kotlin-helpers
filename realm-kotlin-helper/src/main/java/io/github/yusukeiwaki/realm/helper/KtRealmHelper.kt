@@ -46,14 +46,10 @@ object KtRealmHelper {
         }
     }
 
-    interface TransactionForRead<T> {
-        fun execute(realm: Realm): T
-    }
-
-    fun <T : RealmModel> executeTransactionForRead(transaction: TransactionForRead<T>): T? {
+    fun <T : RealmModel> read(query: (Realm) -> T?): T? {
         realm.use {
             try {
-                return copyFromRealm(transaction.execute(it))
+                return copyFromRealm(query(it))
             } catch (e: Exception) {
                 logError(e)
                 return null;
@@ -61,10 +57,10 @@ object KtRealmHelper {
         }
     }
 
-    fun <T : RealmModel> executeTransactionForReadList(transaction: TransactionForRead<OrderedRealmCollection<T>>): List<T> {
+    fun <T : RealmModel> readList(query: (Realm) -> OrderedRealmCollection<T>): List<T> {
         realm.use {
             try {
-                return copyFromRealm(transaction.execute(it))
+                return copyFromRealm(query(it))
             } catch(e: Exception) {
                 logError(e)
                 return emptyList()
@@ -72,11 +68,12 @@ object KtRealmHelper {
         }
     }
 
-    suspend fun executeTransaction(transaction: Realm.Transaction) = async {
+    suspend fun executeTransaction(transaction: (Realm) -> Unit) = async {
+        val realmTransaction: Realm.Transaction  = Realm.Transaction(transaction)
         if (shouldUseSyncTransaction) {
-            executeTransactionSync(transaction)
+            executeTransactionSync(realmTransaction)
         } else {
-            executeTransactionAsync(transaction)
+            executeTransactionAsync(realmTransaction)
         }
     }
 
